@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "description": "Accessibility-first client-side form builder. PBL 10, Web Technologies, Woxsen University.",
+  "author": "Mohammed Amaan Khan <amaan.coderx@gmail.com> (25WU0101075, CSE Rhinos)",
+  "license": "MIT",
   "scripts": {
     "test": "node tests/test-smoke.js && node tests/test-behaviour.js && node tests/test-edge.js && node tests/test-axe.js",
     "test:smoke": "node tests/test-smoke.js",

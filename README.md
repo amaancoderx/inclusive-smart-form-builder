@@ -29,6 +29,8 @@
 
 <br />
 
+**Mohammed Amaan Khan** &nbsp;&middot;&nbsp; 25WU0101075 &nbsp;&middot;&nbsp; CSE Rhinos
+
 Woxsen University &nbsp;&middot;&nbsp; PBL 10 &nbsp;&middot;&nbsp; Web Technologies &nbsp;&middot;&nbsp; II Year B.Tech
 
 </div>
@@ -413,8 +415,15 @@ That limitation, and four others, are recorded in
 
 ## Author
 
-**Amaan** ([@amaancoderx](https://github.com/amaancoderx))
-Woxsen University, School of Technology, II Year B.Tech
+**Mohammed Amaan Khan**
+
+| | |
+|---|---|
+| Roll number | 25WU0101075 |
+| Section | CSE Rhinos |
+| Programme | B.Tech Computer Science and Engineering, II Year |
+| Institution | Woxsen University, School of Technology |
+| GitHub | [@amaancoderx](https://github.com/amaancoderx) |
 
 <br />
 

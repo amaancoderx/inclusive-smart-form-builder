@@ -41,6 +41,13 @@
   font-size: .8125rem;
 }
 
+.app-header__byline {
+  margin-top: .1rem;
+  color: var(--ink-2);
+  font-size: .8125rem;
+  font-weight: 600;
+}
+
 .app-header__tools {
   display: flex;
   flex-wrap: wrap;
