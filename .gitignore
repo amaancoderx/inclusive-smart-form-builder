@@ -1,0 +1,16 @@
+# Dependencies (dev only; the app itself has none)
+node_modules/
+package-lock.json
+
+# Editor and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and scratch
+*.log
+npm-debug.log*
+.cache/
+tmp/

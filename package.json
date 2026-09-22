@@ -1,0 +1,18 @@
+{
+  "name": "inclusive-smart-form-builder",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Accessibility-first client-side form builder. PBL 10, Web Technologies, Woxsen University.",
+  "scripts": {
+    "test": "node tests/test-smoke.js && node tests/test-behaviour.js && node tests/test-edge.js && node tests/test-axe.js",
+    "test:smoke": "node tests/test-smoke.js",
+    "test:behaviour": "node tests/test-behaviour.js",
+    "test:edge": "node tests/test-edge.js",
+    "test:axe": "node tests/test-axe.js",
+    "serve": "python -m http.server 8000"
+  },
+  "devDependencies": {
+    "axe-core": "^4.13.0",
+    "jsdom": "^29.1.1"
+  }
+}

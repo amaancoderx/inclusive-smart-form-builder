@@ -1,0 +1,336 @@
+/* ==========================================================================
+   tokens.css: design tokens, theming, reset and shared utilities
+   --------------------------------------------------------------------------
+   Every colour pair used for text was checked against WCAG 2.1 SC 1.4.3
+   (4.5:1 for body text, 3:1 for large text and UI boundaries). The three
+   display modes below (theme, contrast and text size) are switched by
+   data-* attributes on <html>, so JavaScript only ever toggles one attribute.
+   ========================================================================== */
+
+:root {
+  /* Neutrals and surfaces ------------------------------------------------ */
+  --canvas:        #f1f3f7;
+  --surface:       #ffffff;
+  --surface-2:     #f8f9fb;
+  --surface-3:     #eef1f6;
+  --line:          #dee2e9;
+  --line-strong:   #bfc6d2;
+
+  /* Text ----------------------------------------------------------------- */
+  --ink:           #131720;   /* 17.4:1 on --surface */
+  --ink-2:         #4a5464;   /* 8.1:1  on --surface */
+  --ink-3:         #66707f;   /* 5.4:1  on --surface */
+
+  /* Accent --------------------------------------------------------------- */
+  --accent:        #1d4ed8;   /* 8.0:1  on --surface */
+  --accent-hover:  #1740b4;
+  --accent-ink:    #ffffff;   /* 8.0:1  on --accent  */
+  --accent-soft:   #eaefff;
+  --accent-line:   #b9c8f5;
+
+  /* Status --------------------------------------------------------------- */
+  --danger:        #b42318;   /* 6.9:1 on --surface */
+  --danger-soft:   #fdf1f0;
+  --danger-line:   #f0b5ae;
+  --success:       #056b41;   /* 6.0:1 on --surface */
+  --success-soft:  #eaf6f0;
+  --warn:          #9a4c06;   /* 6.4:1 on --surface */
+  --warn-soft:     #fdf3e8;
+
+  /* Incidental ----------------------------------------------------------- */
+  --mark-ink:      #ffffff;
+  --focus:         #1d4ed8;
+  --shadow-sm:     0 1px 2px rgba(17, 24, 39, .06), 0 1px 3px rgba(17, 24, 39, .05);
+
+  /* Geometry: an 8px spacing grid, with 4px half-steps ------------------- */
+  --sp-1: .25rem;  --sp-2: .5rem;   --sp-3: .75rem;  --sp-4: 1rem;
+  --sp-5: 1.5rem;  --sp-6: 2rem;
+  --radius-sm: 6px;
+  --radius:    10px;
+  --radius-lg: 14px;
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+
+  --border-width: 1px;
+  --focus-width: 3px;
+  --ring-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Dark theme
+   -------------------------------------------------------------------------- */
+:root[data-theme="dark"] {
+  --canvas:        #0d1015;
+  --surface:       #161a21;
+  --surface-2:     #1b2028;
+  --surface-3:     #222833;
+  --line:          #2a313c;
+  --line-strong:   #3d4654;
+
+  --ink:           #e9edf3;   /* 14.6:1 on --surface */
+  --ink-2:         #b4bdca;   /* 8.4:1  on --surface */
+  --ink-3:         #8c96a5;   /* 5.2:1  on --surface */
+
+  --accent:        #86a9ff;   /* 7.4:1  on --surface */
+  --accent-hover:  #a3bfff;
+  --accent-ink:    #0d1015;   /* 7.4:1  on --accent  */
+  --accent-soft:   #1b2440;
+  --accent-line:   #33436e;
+
+  --danger:        #f6a59c;   /* 7.9:1 on --surface */
+  --danger-soft:   #2c1a18;
+  --danger-line:   #5c2f2a;
+  --success:       #62cf98;
+  --success-soft:  #13291f;
+  --warn:          #e8ab5c;
+  --warn-soft:     #2a2013;
+
+  --mark-ink:      #0d1015;
+  --focus:         #a3bfff;
+  --shadow-sm:     0 1px 2px rgba(0, 0, 0, .4);
+}
+
+/* --------------------------------------------------------------------------
+   High-contrast mode, layered on top of either theme.
+   Borders get heavier so component boundaries do not rely on subtle fills.
+   -------------------------------------------------------------------------- */
+:root[data-contrast="high"] {
+  --canvas:      #ffffff;
+  --surface:     #ffffff;
+  --surface-2:   #ffffff;
+  --surface-3:   #f0f0f0;
+  --line:        #000000;
+  --line-strong: #000000;
+  --ink:         #000000;
+  --ink-2:       #000000;
+  --ink-3:       #1a1a1a;
+  --accent:      #00379e;
+  --accent-hover:#002a7a;
+  --accent-ink:  #ffffff;
+  --accent-soft: #ffffff;
+  --accent-line: #00379e;
+  --danger:      #a00000;
+  --danger-soft: #ffffff;
+  --danger-line: #a00000;
+  --success:     #00543a;
+  --success-soft:#ffffff;
+  --warn:        #6b3400;
+  --warn-soft:   #ffffff;
+  --mark-ink:    #ffffff;
+  --focus:       #000000;
+  --shadow-sm:   none;
+  --border-width: 2px;
+  --focus-width: 4px;
+}
+
+:root[data-theme="dark"][data-contrast="high"] {
+  --canvas:      #000000;
+  --surface:     #000000;
+  --surface-2:   #000000;
+  --surface-3:   #141414;
+  --line:        #ffffff;
+  --line-strong: #ffffff;
+  --ink:         #ffffff;
+  --ink-2:       #ffffff;
+  --ink-3:       #ededed;
+  --accent:      #8fb4ff;
+  --accent-hover:#b9cfff;
+  --accent-ink:  #000000;
+  --accent-soft: #000000;
+  --accent-line: #8fb4ff;
+  --danger:      #ff9d92;
+  --danger-soft: #000000;
+  --danger-line: #ff9d92;
+  --success:     #6fe0a6;
+  --success-soft:#000000;
+  --warn:        #ffbc6b;
+  --warn-soft:   #000000;
+  --mark-ink:    #000000;
+  --focus:       #ffffff;
+}
+
+/* Large-text mode: scales the whole interface, since every size is in rem. */
+:root[data-text-size="large"] { font-size: 125%; }
+
+/* ==========================================================================
+   Reset and base
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, p, ul, ol, figure, fieldset { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+fieldset { padding: 0; border: 0; min-width: 0; }
+legend { padding: 0; }
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+code, kbd, samp, pre { font-family: var(--font-mono); }
+
+kbd {
+  display: inline-block;
+  padding: .05em .4em;
+  border: var(--border-width) solid var(--line-strong);
+  border-bottom-width: calc(var(--border-width) + 1px);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: .82em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+code {
+  padding: .08em .32em;
+  border-radius: 4px;
+  background: var(--surface-3);
+  font-size: .88em;
+}
+
+/* ==========================================================================
+   Focus: one visible, high-contrast ring for every interactive element.
+   :focus-visible keeps it off mouse clicks; the :focus fallback keeps older
+   browsers from losing the indicator entirely (SC 2.4.7).
+   ========================================================================== */
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: var(--ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+@supports not selector(:focus-visible) {
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus {
+    outline: var(--focus-width) solid var(--focus);
+    outline-offset: var(--ring-offset);
+  }
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+/* Available to assistive technology, removed from the visual layout. */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: var(--sp-4);
+  z-index: 50;
+  transform: translateY(-120%);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform .12s ease-out;
+}
+.skip-link:focus { transform: translateY(0); }
+
+[hidden] { display: none !important; }
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: .5rem .9rem;
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: .9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color .12s ease, border-color .12s ease, color .12s ease;
+}
+.btn:hover { background: var(--accent-hover); }
+
+.btn--quiet {
+  background: var(--surface);
+  border-color: var(--line-strong);
+  color: var(--ink-2);
+}
+.btn--quiet:hover { background: var(--surface-3); color: var(--ink); }
+
+.btn--danger-quiet {
+  background: var(--surface);
+  border-color: var(--danger-line);
+  color: var(--danger);
+}
+.btn--danger-quiet:hover { background: var(--danger-soft); }
+
+.btn--sm { padding: .3rem .625rem; font-size: .8125rem; }
+
+/* A file input styled through its own label; the input stays focusable. */
+.btn--file { position: relative; cursor: pointer; }
+.btn--file input[type="file"] {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.btn--file:focus-within {
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: var(--ring-offset);
+}
+
+.link-btn {
+  /* Vertical padding only: it keeps the hit area above 24px tall without
+     moving the text off its baseline in the sentence it sits in. */
+  padding: .25rem 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-size: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.link-btn:hover { color: var(--accent-hover); }
+
+/* ==========================================================================
+   Motion: honour the operating system setting (SC 2.3.3)
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

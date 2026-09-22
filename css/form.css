@@ -1,0 +1,378 @@
+/* ==========================================================================
+   form.css: the generated form itself
+   --------------------------------------------------------------------------
+   Styling here deliberately never carries meaning on its own. Required state,
+   error state and selection are each announced by markup first (the word
+   "required", the error text, aria-invalid) and only then reinforced with
+   colour, weight and an icon, so the form reads the same in greyscale, in
+   high-contrast mode and through a screen reader (WCAG SC 1.4.1).
+   ========================================================================== */
+
+.gen-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+.gen-form__header { display: flex; flex-direction: column; gap: var(--sp-2); }
+
+.gen-form__title {
+  font-size: 1.375rem;
+  font-weight: 650;
+  letter-spacing: -.015em;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.gen-form__description {
+  color: var(--ink-2);
+  font-size: .9375rem;
+  line-height: 1.55;
+}
+
+.gen-form__legend-note {
+  color: var(--ink-3);
+  font-size: .8125rem;
+}
+
+.gen-form__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.gen-form__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  padding-top: var(--sp-4);
+  border-top: var(--border-width) solid var(--line);
+}
+
+.gen-form__submit { padding: .6rem 1.25rem; font-size: .9375rem; }
+
+/* --------------------------------------------------------------------------
+   A single field
+   -------------------------------------------------------------------------- */
+
+.field { display: flex; flex-direction: column; }
+
+.field__label {
+  display: block;
+  margin-bottom: var(--sp-1);
+  color: var(--ink);
+  font-size: .9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* The word is spelled out rather than shown as a bare asterisk, so it is
+   understandable both visually and when read aloud. */
+.field__required {
+  margin-left: .35rem;
+  color: var(--danger);
+  font-size: .8125rem;
+  font-weight: 600;
+}
+
+.field__optional {
+  margin-left: .35rem;
+  color: var(--ink-3);
+  font-size: .8125rem;
+  font-weight: 500;
+}
+
+.field__hint {
+  margin-bottom: var(--sp-2);
+  color: var(--ink-2);
+  font-size: .8125rem;
+  line-height: 1.5;
+}
+
+.field__control {
+  width: 100%;
+  min-height: 2.75rem;            /* comfortable target size, SC 2.5.8 */
+  padding: .55rem .75rem;
+  border: var(--border-width) solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: .9375rem;
+  line-height: 1.5;
+  transition: border-color .12s ease, box-shadow .12s ease;
+}
+.field__control:hover { border-color: var(--ink-3); }
+.field__control::placeholder { color: var(--ink-3); opacity: 1; }
+
+textarea.field__control {
+  min-height: 6.5rem;
+  resize: vertical;
+}
+
+select.field__control {
+  appearance: none;
+  padding-right: 2.25rem;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+                    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: right 1.15rem center, right .8rem center;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+/* Invalid state: a thicker border plus the inline message and the icon.
+   aria-invalid is the source of truth, and the selector reads from it. */
+.field__control[aria-invalid="true"] {
+  border-color: var(--danger);
+  border-width: 2px;
+  background: var(--danger-soft);
+}
+
+.field__control[aria-invalid="true"]:focus-visible {
+  outline-color: var(--danger);
+}
+
+/* --------------------------------------------------------------------------
+   Inline error message
+   -------------------------------------------------------------------------- */
+
+.field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: .4rem;
+  margin-top: var(--sp-2);
+  color: var(--danger);
+  font-size: .8125rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+/* Empty means "no error": an empty element contributes nothing to the
+   accessible description, so aria-describedby can point at it permanently. */
+.field__error:empty { display: none; }
+
+.field__error::before {
+  content: "\26A0";
+  flex: none;
+  font-size: .9375rem;
+  line-height: 1.25;
+}
+
+/* --------------------------------------------------------------------------
+   Checkbox and radio groups
+   -------------------------------------------------------------------------- */
+
+.field--checkbox .field__checkbox-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border: var(--border-width) solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.field--checkbox .field__label { margin-bottom: 0; font-weight: 550; }
+
+input[type="checkbox"].field__check,
+input[type="radio"].field__check {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: .2rem 0 0;
+  accent-color: var(--accent);
+}
+
+input[type="checkbox"].field__check[aria-invalid="true"] {
+  outline: 2px solid var(--danger);
+  outline-offset: 2px;
+}
+
+/* The group is what is invalid, not any one option, so the marker sits
+   beside the whole set of choices. */
+.field__group[aria-invalid="true"] .field__choices {
+  padding-left: var(--sp-3);
+  border-left: 3px solid var(--danger);
+}
+
+/* A radio group is a real <fieldset>, and the group's question is its
+   <legend>, which is the only reliable way a screen reader can tie the two together. */
+.field--radio .field__group {
+  padding: 0;
+  border: 0;
+}
+
+.field__group-legend {
+  margin-bottom: var(--sp-1);
+  color: var(--ink);
+  font-size: .9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.field__choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+.field__choice {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: .55rem var(--sp-3);
+  border: var(--border-width) solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color .12s ease, background-color .12s ease;
+}
+.field__choice:hover { border-color: var(--line-strong); background: var(--surface-2); }
+
+.field__choice-label {
+  color: var(--ink);
+  font-size: .9375rem;
+  cursor: pointer;
+}
+
+.field__choice:focus-within {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* --------------------------------------------------------------------------
+   Error summary: the pattern that makes a failed submit navigable.
+   It is announced on submit, receives focus, and each entry is a link that
+   moves focus to the field it names (WCAG SC 3.3.1 and 3.3.3).
+   -------------------------------------------------------------------------- */
+
+.error-summary {
+  padding: var(--sp-4);
+  border: 2px solid var(--danger);
+  border-radius: var(--radius);
+  background: var(--danger-soft);
+}
+.error-summary:focus-visible {
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: var(--ring-offset);
+}
+
+.error-summary__title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--danger);
+  font-size: 1rem;
+  font-weight: 700;
+}
+.error-summary__title::before { content: "\26A0"; font-size: 1.1rem; }
+
+.error-summary__intro {
+  margin-top: var(--sp-1);
+  color: var(--ink-2);
+  font-size: .875rem;
+}
+
+.error-summary__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin-top: var(--sp-3);
+}
+
+.error-summary__link {
+  display: inline-block;
+  padding: .15rem 0;
+  color: var(--danger);
+  font-size: .875rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.error-summary__link:hover { text-decoration-thickness: 2px; }
+
+/* --------------------------------------------------------------------------
+   Success message shown after a valid submit
+   -------------------------------------------------------------------------- */
+
+.form-success {
+  padding: var(--sp-4);
+  border: 2px solid var(--success);
+  border-radius: var(--radius);
+  background: var(--success-soft);
+}
+.form-success:focus-visible {
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: var(--ring-offset);
+}
+
+.form-success__title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--success);
+  font-size: 1rem;
+  font-weight: 700;
+}
+.form-success__title::before { content: "\2713"; }
+
+.form-success__body {
+  margin-top: var(--sp-2);
+  color: var(--ink-2);
+  font-size: .875rem;
+}
+
+.form-success__data {
+  display: grid;
+  grid-template-columns: minmax(6rem, auto) 1fr;
+  gap: var(--sp-1) var(--sp-4);
+  margin-top: var(--sp-3);
+  font-size: .875rem;
+}
+.form-success__data dt { color: var(--ink-3); font-weight: 600; }
+.form-success__data dd { margin: 0; color: var(--ink); overflow-wrap: anywhere; }
+
+/* --------------------------------------------------------------------------
+   Empty preview
+   -------------------------------------------------------------------------- */
+
+.preview-empty {
+  padding: var(--sp-6) var(--sp-4);
+  color: var(--ink-3);
+  font-size: .9375rem;
+  text-align: center;
+}
+.preview-empty strong { display: block; margin-bottom: var(--sp-1); color: var(--ink-2); }
+
+/* ==========================================================================
+   Small screens
+   ========================================================================== */
+
+@media (max-width: 560px) {
+  .gen-form { gap: var(--sp-4); }
+  .gen-form__fields { gap: var(--sp-4); }
+  .gen-form__title { font-size: 1.1875rem; }
+  .gen-form__submit { width: 100%; }
+  .error-summary { padding: var(--sp-3); }
+  .form-success { padding: var(--sp-3); }
+
+  /* Two columns leave the value squeezed against the screen edge. */
+  .form-success__data {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .form-success__data dt { margin-top: var(--sp-2); }
+}
+
+/* A long unbroken string, such as a pasted URL in a textarea or an email with
+   no spaces, must not be what pushes the page sideways. */
+.field__hint,
+.field__error,
+.field__label,
+.field__group-legend,
+.gen-form__title,
+.gen-form__description,
+.error-summary__link { overflow-wrap: break-word; }

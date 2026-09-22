@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-contrast="normal" data-text-size="normal">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inclusive Smart Form Builder</title>
+  <meta name="description" content="An accessibility-first, client-side form builder. Configure fields, render them with correct labels and ARIA attributes, and validate them in real time with screen-reader-friendly error messages.">
+  <!-- Inline so the page makes no network request of any kind, and so a
+       browser looking for /favicon.ico never logs a 404. -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231d4ed8'/%3E%3Cpath d='M9 10.5h14M9 16h14M9 21.5h8' stroke='white' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/form.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- One polite live region for the whole builder: every action reports here for screen reader users. -->
+  <p id="sr-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></p>
+
+  <header class="app-header">
+    <div class="app-header__identity">
+      <span class="app-header__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="30" height="30" focusable="false">
+          <rect width="32" height="32" rx="8" fill="currentColor"></rect>
+          <path d="M9 10.5h14M9 16h14M9 21.5h8" stroke="var(--mark-ink)" stroke-width="2.6" stroke-linecap="round"></path>
+        </svg>
+      </span>
+      <div>
+        <h1 class="app-header__title">Inclusive Smart Form Builder</h1>
+        <p class="app-header__subtitle">Woxsen University &middot; PBL 10 &middot; Web Technologies, II Year B.Tech</p>
+      </div>
+    </div>
+
+    <div class="app-header__tools" role="group" aria-label="Display settings">
+      <button type="button" class="tool-btn" id="toggle-theme" aria-pressed="false">
+        <span class="tool-btn__icon" aria-hidden="true">
+          <svg viewBox="0 0 20 20" width="16" height="16" focusable="false"><path d="M16 11.5A6.5 6.5 0 0 1 8.5 4a6.5 6.5 0 1 0 7.5 7.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path></svg>
+        </span>
+        Dark theme
+      </button>
+      <button type="button" class="tool-btn" id="toggle-contrast" aria-pressed="false">
+        <span class="tool-btn__icon" aria-hidden="true">
+          <svg viewBox="0 0 20 20" width="16" height="16" focusable="false"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M10 3v14a7 7 0 0 0 0-14Z" fill="currentColor"></path></svg>
+        </span>
+        High contrast
+      </button>
+      <button type="button" class="tool-btn" id="toggle-text-size" aria-pressed="false">
+        <span class="tool-btn__icon" aria-hidden="true">
+          <svg viewBox="0 0 20 20" width="16" height="16" focusable="false"><path d="M2 16 7 4l5 12M3.6 12.4h6.8M12.5 16l3.2-7.5L19 16M13.4 13.4h4.3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </span>
+        Large text
+      </button>
+    </div>
+  </header>
+
+  <main id="main" class="app" tabindex="-1">
+
+    <!-- ===================== 1. FORM CONFIGURATION MODULE ===================== -->
+    <section class="panel panel--config" aria-labelledby="config-heading">
+      <div class="panel__head">
+        <h2 class="panel__title" id="config-heading">Form configuration</h2>
+        <p class="panel__hint">Build the field list. Every control here works with a mouse or with the keyboard alone.</p>
+      </div>
+
+      <div class="panel__body">
+        <details class="settings" id="form-settings">
+          <summary class="settings__summary">Form details</summary>
+          <div class="settings__body">
+            <div class="control">
+              <label class="control__label" for="form-title">Form title</label>
+              <input class="control__input" type="text" id="form-title" autocomplete="off">
+            </div>
+            <div class="control">
+              <label class="control__label" for="form-description">Short description</label>
+              <input class="control__input" type="text" id="form-description" autocomplete="off" aria-describedby="form-description-hint">
+              <p class="control__hint" id="form-description-hint">Rendered as the form&rsquo;s accessible description.</p>
+            </div>
+            <div class="control">
+              <label class="control__label" for="form-submit-text">Submit button text</label>
+              <input class="control__input" type="text" id="form-submit-text" autocomplete="off">
+            </div>
+          </div>
+        </details>
+
+        <div class="palette">
+          <h3 class="palette__title" id="palette-heading">Add a field</h3>
+          <div class="palette__grid" role="group" aria-labelledby="palette-heading" id="palette"></div>
+        </div>
+
+        <div class="field-list-block">
+          <div class="field-list-block__head">
+            <h3 class="field-list-block__title" id="field-list-heading">
+              Fields in this form
+              <span class="count-badge" id="field-count" aria-hidden="true">0</span>
+            </h3>
+            <button type="button" class="btn btn--quiet btn--sm" id="clear-fields">Clear all</button>
+          </div>
+
+          <p class="empty-state" id="field-list-empty">
+            No fields yet. Choose a field type above to start building your form.
+          </p>
+
+          <ol class="field-list" id="field-list" aria-labelledby="field-list-heading"></ol>
+
+          <div class="undo-bar" id="undo-bar" hidden>
+            <p class="undo-bar__text" id="undo-bar-text"></p>
+            <button type="button" class="btn btn--quiet btn--sm" id="undo-remove">Undo</button>
+          </div>
+
+          <p class="field-list__tip">
+            Tip: with focus anywhere on a field&rsquo;s controls, press <kbd>Alt</kbd>&nbsp;+&nbsp;<kbd>&uarr;</kbd>
+            or <kbd>Alt</kbd>&nbsp;+&nbsp;<kbd>&darr;</kbd> to reorder it.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 2. FIELD PROPERTIES EDITOR ===================== -->
+    <section class="panel panel--editor" aria-labelledby="editor-heading">
+      <div class="panel__head">
+        <h2 class="panel__title" id="editor-heading">Field properties</h2>
+        <p class="panel__hint" id="editor-subject">Select a field from the list to edit it.</p>
+      </div>
+
+      <div class="panel__body">
+        <p class="empty-state" id="editor-empty">
+          Nothing selected. Choose a field in the list, and its settings appear here.
+        </p>
+
+        <form class="editor" id="editor-form" novalidate hidden>
+          <div class="control">
+            <label class="control__label" for="prop-label">Label</label>
+            <input class="control__input" type="text" id="prop-label" autocomplete="off" aria-describedby="prop-label-hint">
+            <p class="control__hint" id="prop-label-hint">Becomes the field&rsquo;s visible &lt;label&gt; and its accessible name.</p>
+          </div>
+
+          <div class="control">
+            <label class="control__label" for="prop-hint">Help text</label>
+            <input class="control__input" type="text" id="prop-hint" autocomplete="off" aria-describedby="prop-hint-hint">
+            <p class="control__hint" id="prop-hint-hint">Linked to the field with <code>aria-describedby</code>.</p>
+          </div>
+
+          <div class="control" data-for="text,email,phone,textarea">
+            <label class="control__label" for="prop-placeholder">Placeholder</label>
+            <input class="control__input" type="text" id="prop-placeholder" autocomplete="off" aria-describedby="prop-placeholder-hint">
+            <p class="control__hint" id="prop-placeholder-hint">Optional, and never a substitute for the label.</p>
+          </div>
+
+          <div class="control control--check">
+            <input type="checkbox" id="prop-required">
+            <label for="prop-required">Required field</label>
+          </div>
+
+          <fieldset class="control control--group" data-for="text,email,phone,textarea">
+            <legend class="control__legend">Validation</legend>
+            <div class="control">
+              <label class="control__label control__label--sub" for="prop-rule">Rule</label>
+              <select class="control__input" id="prop-rule"></select>
+            </div>
+            <div class="control" id="prop-custom-wrap" hidden>
+              <label class="control__label control__label--sub" for="prop-pattern">Custom pattern (regular expression)</label>
+              <input class="control__input control__input--mono" type="text" id="prop-pattern" autocomplete="off" spellcheck="false" aria-describedby="prop-pattern-error">
+              <p class="control__error" id="prop-pattern-error"></p>
+              <label class="control__label control__label--sub" for="prop-pattern-message">Message shown when it does not match</label>
+              <input class="control__input" type="text" id="prop-pattern-message" autocomplete="off">
+            </div>
+          </fieldset>
+
+          <div class="control-row" data-for="text,textarea">
+            <div class="control">
+              <label class="control__label" for="prop-minlength">Minimum length</label>
+              <input class="control__input" type="number" id="prop-minlength" min="0" step="1" inputmode="numeric">
+            </div>
+            <div class="control">
+              <label class="control__label" for="prop-maxlength">Maximum length</label>
+              <input class="control__input" type="number" id="prop-maxlength" min="0" step="1" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="control" data-for="dropdown">
+            <label class="control__label" for="prop-prompt">Prompt shown before a choice is made</label>
+            <input class="control__input" type="text" id="prop-prompt" autocomplete="off">
+          </div>
+
+          <fieldset class="control control--group" data-for="dropdown,radio">
+            <legend class="control__legend">Choices</legend>
+            <ul class="option-list" id="option-list"></ul>
+            <button type="button" class="btn btn--quiet btn--sm" id="add-option">Add choice</button>
+          </fieldset>
+
+          <div class="editor__footer">
+            <button type="button" class="btn btn--quiet" id="duplicate-field">Duplicate field</button>
+            <button type="button" class="btn btn--danger-quiet" id="delete-field">Delete field</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ 3. RENDERING ENGINE OUTPUT / EXPORT / CHECKS ============ -->
+    <section class="panel panel--output" aria-labelledby="output-heading">
+      <div class="panel__head">
+        <h2 class="panel__title" id="output-heading">Generated form</h2>
+        <p class="panel__hint">Rendered live from the configuration through DOM manipulation, with no page reload.</p>
+      </div>
+
+      <div class="tabs">
+        <div class="tablist" role="tablist" aria-label="Generated form views">
+          <button type="button" class="tab" role="tab" id="tab-preview" aria-controls="tabpanel-preview" aria-selected="true" tabindex="0">Live preview</button>
+          <button type="button" class="tab" role="tab" id="tab-json" aria-controls="tabpanel-json" aria-selected="false" tabindex="-1">JSON</button>
+          <button type="button" class="tab" role="tab" id="tab-html" aria-controls="tabpanel-html" aria-selected="false" tabindex="-1">HTML</button>
+          <button type="button" class="tab" role="tab" id="tab-audit" aria-controls="tabpanel-audit" aria-selected="false" tabindex="-1">Checks<span class="tab__badge" id="audit-badge" hidden></span></button>
+        </div>
+
+        <!-- Live preview of the generated form -->
+        <div class="tabpanel" role="tabpanel" id="tabpanel-preview" aria-labelledby="tab-preview" tabindex="0">
+          <div class="preview-surface">
+            <div class="preview-surface__bar">
+              <span class="preview-surface__dot" aria-hidden="true"></span>
+              <span class="preview-surface__dot" aria-hidden="true"></span>
+              <span class="preview-surface__dot" aria-hidden="true"></span>
+              <span class="preview-surface__caption">the generated form, as a visitor meets it</span>
+            </div>
+            <div class="preview-surface__stage" id="preview-stage"></div>
+          </div>
+        </div>
+
+        <!-- JSON export and import -->
+        <div class="tabpanel" role="tabpanel" id="tabpanel-json" aria-labelledby="tab-json" tabindex="0" hidden>
+          <div class="io">
+            <div class="io__head">
+              <h3 class="io__title" id="json-heading">Field configuration</h3>
+              <div class="io__actions">
+                <button type="button" class="btn btn--quiet btn--sm" id="copy-json">Copy</button>
+                <button type="button" class="btn btn--quiet btn--sm" id="download-json">Download .json</button>
+              </div>
+            </div>
+            <textarea class="code" id="json-output" readonly spellcheck="false" aria-labelledby="json-heading"></textarea>
+
+            <h3 class="io__title io__title--spaced" id="import-heading">Load a saved configuration</h3>
+            <label class="control__label control__label--sub" for="json-import">Paste a configuration here</label>
+            <textarea class="code code--sm" id="json-import" spellcheck="false" aria-describedby="json-import-status"></textarea>
+            <div class="io__actions io__actions--start">
+              <button type="button" class="btn btn--sm" id="load-json">Load configuration</button>
+              <label class="btn btn--quiet btn--sm btn--file" for="json-file">
+                Choose a .json file
+                <input type="file" id="json-file" accept="application/json,.json">
+              </label>
+            </div>
+            <p class="io__status" id="json-import-status" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <!-- HTML export -->
+        <div class="tabpanel" role="tabpanel" id="tabpanel-html" aria-labelledby="tab-html" tabindex="0" hidden>
+          <div class="io">
+            <div class="io__head">
+              <h3 class="io__title" id="html-heading">Accessible HTML markup</h3>
+              <div class="io__actions">
+                <button type="button" class="btn btn--quiet btn--sm" id="copy-html">Copy</button>
+                <button type="button" class="btn btn--quiet btn--sm" id="download-html">Download .html</button>
+              </div>
+            </div>
+            <p class="io__note">
+              This is the markup the rendering engine produces, including every ARIA attribute.
+              The download wraps it in a complete page with the form styles attached; the
+              validation behaviour stays here in the builder.
+            </p>
+            <textarea class="code code--tall" id="html-output" readonly spellcheck="false" aria-labelledby="html-heading"></textarea>
+          </div>
+        </div>
+
+        <!-- Built-in configuration checks -->
+        <div class="tabpanel" role="tabpanel" id="tabpanel-audit" aria-labelledby="tab-audit" tabindex="0" hidden>
+          <div class="io">
+            <h3 class="io__title" id="audit-heading">Accessibility checks</h3>
+            <p class="io__note">
+              These run against your configuration on every change. They complement, and do not replace,
+              an audit in the browser&rsquo;s Lighthouse or Accessibility panel.
+            </p>
+            <ul class="audit-list" id="audit-list" aria-labelledby="audit-heading"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Built with HTML5, CSS3 and vanilla JavaScript (ES6). No frameworks, no build step, no network requests.</p>
+    <p class="app-footer__meta">
+      <span id="storage-note">Your configuration is saved in this browser only.</span>
+      <button type="button" class="link-btn" id="reset-app">Reset to the sample form</button>
+    </p>
+  </footer>
+
+  <script src="js/dom.js"></script>
+  <script src="js/schema.js"></script>
+  <script src="js/a11y.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/validator.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/builder.js"></script>
+  <script src="js/exporter.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
