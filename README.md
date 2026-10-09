@@ -21,6 +21,10 @@
 
 <br />
 
+### [Open the live demo](https://inclusive-smart-form-builder--amaanbuilds.replit.app/)
+
+<br />
+
 **[Quick start](#quick-start)** &nbsp;&middot;&nbsp;
 **[Features](#features)** &nbsp;&middot;&nbsp;
 **[Accessibility](#accessibility)** &nbsp;&middot;&nbsp;
@@ -81,11 +85,14 @@ python -m http.server 8000
 
 | What | Where |
 |------|-------|
-| The app | `index.html` |
+| Live demo | [inclusive-smart-form-builder--amaanbuilds.replit.app](https://inclusive-smart-form-builder--amaanbuilds.replit.app/) |
+| Replit project | [replit.com/@amaanbuilds/inclusive-smart-form-builder](https://replit.com/@amaanbuilds/inclusive-smart-form-builder) |
+| The app, locally | `index.html` |
 | Served locally | `http://127.0.0.1:8000/index.html` |
 | Project report | [`docs/REPORT.md`](docs/REPORT.md) |
 | Audit results | [`docs/ACCESSIBILITY-AUDIT.md`](docs/ACCESSIBILITY-AUDIT.md) |
 | Lighthouse run | [`docs/lighthouse-report.html`](docs/lighthouse-report.html) |
+| Presentation | [`docs/presentation.pdf`](docs/presentation.pdf) |
 
 There is no build step, no bundler and no runtime dependency. The scripts are loaded as
 classic `<script>` tags rather than ES modules on purpose, because ES modules are blocked by
