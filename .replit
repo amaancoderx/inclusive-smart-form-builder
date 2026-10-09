@@ -1,0 +1,17 @@
+# Replit configuration.
+#
+# This project is static: HTML, CSS and vanilla JavaScript with no build step.
+# All Replit has to do is serve the folder, so the run command starts Python's
+# built-in HTTP server on 0.0.0.0 (Replit cannot reach a server bound only to
+# localhost) and the port mapping exposes it on the public URL.
+
+run = "python3 -m http.server 8000 --bind 0.0.0.0"
+entrypoint = "index.html"
+language = "html"
+
+[nix]
+channel = "stable-23_05"
+
+[[ports]]
+localPort = 8000
+externalPort = 80
